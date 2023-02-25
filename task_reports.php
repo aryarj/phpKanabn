@@ -1,15 +1,32 @@
 <?php
-    require_once 'connection.php';
+    require_once './Controller/connection.php';
+    require_once 'Model/checagem.php';
+    require_once './Model/NovaTarefa.php';
+    cabecalhoChecagem();
+
+    $name = $_SESSION["name"];
+    $idUser = $_SESSION["id"];
+    echo "Nome do usuário: ";
+    echo $name.'<br><br>';
 
     //consultando o banco de dados
     //Selecionando os usuários
     $user = "SELECT * FROM users";
     $user2 = mysqli_query($conn,$user);
+    
 
     //Selecionando as tarefas
-    //$tarefas = "SELECT task FROM tasks WHERE id_user=$idUser";
-    $tarefas = "SELECT * FROM tasks";
+    if($idUser=='admin')
+    {
+        $tarefas = "SELECT * FROM tasks";
+    }
+    else
+    {
+        $tarefas = "SELECT * FROM tasks WHERE id_user=$idUser";
+    }
+    
     $tarefas2 = mysqli_query($conn,$tarefas);
+        
     /*$tarefas3[] = '';
 
     //Verificando se há algum resultado
@@ -23,6 +40,7 @@
 ?>
 
 <br><br>
+
 <div id="tasks_in" style="width: 400px; height: flex; padding: 20px; float:left; overflow-y:auto; 
     border: 1px solid #ccc; border-radius: 5px" ondrop="drop_in(event)" ondragover="allowDrop(event)">
 <h4>Não iniciado</h4>
@@ -33,7 +51,7 @@
             $idUser = '';
             if($t['status']==1)
             {
-                $task = $t['task'];
+                $task = $t['task'];;
                 $idUser = $t['id_user'];
                 foreach($user2 as $u)
                 {
@@ -107,9 +125,10 @@
     ?>
 </div>
 
-    <div style="clear:both; height: 20px"></div>
-    <button class="btn" onclick="setReportsToTask();">SAVE</button>
-    
+
+    <!--<div style="clear:both; height: 20px"></div>
+    <button class="btn" onclick="setReportsToTask();">SAVE</button>-->
+
 <script type="text/javascript"> 
     function drag(ev) {
       ev.dataTransfer.setData("text", ev.target.id);
@@ -138,7 +157,7 @@
     }
 
 //Atualização Banco de dados, recolhendo as tarefas nas divs
-    function setReportsToTask()
+    /*function setReportsToTask()
     {
         var lista = []
         $("#tasks_middle").find("div").each(function()
@@ -158,7 +177,104 @@
                 }
             });
         
-    }
-    
+    }*/
 
 </script>
+
+
+<div style="clear:both; height: 20px"></div>
+<?php
+    // Deixando a entrada "tarefa"
+    //com uma informação qualquer, para não gerar erro
+    $dados= array(
+        'tarefa'=>'',
+        );
+
+        //Caso haja um erro
+        $erros_validacao=array();
+
+    $tarefa = new NovaTarefa;
+
+    // variáveis de confirmação se todos os requisitos foram preenchidos
+        $confTarefa=false;
+    //contador de itens
+        $contador=0;
+
+    if (isset($_POST['tarefa']) && $_POST['tarefa'] !='')
+    {
+        $dados = array();
+
+        $tarefa->setTarefa($_POST['tarefa']);
+        $tarefaGet=$tarefa->getTarefa();
+        if (isset($tarefaGet))
+        {
+            $dados['tarefa']=$tarefaGet;
+            $confTarefa=true;
+            $contador+=1;
+        }
+        else
+        {
+            $erros_validacao['tarefa']='A tarefa está em branco';
+        }
+
+        $transporte[]=$dados;
+    }
+
+    $lista_dados[]=array();
+
+    if(isset($transporte)){
+        $lista_dados=$transporte;
+    }else{
+        $lista_dados=array();
+    }
+
+    //tarefa e se há essa informação
+    if($confTarefa)
+    {
+        $paraFazer=$dados['tarefa'];
+    }else
+    {
+        $paraFazer ='sem informação';
+    }
+?>
+    <form method='POST'><font size="5">
+        <label>
+        Incluir nova tarefa
+            <input type="text" required name="tarefa" placeholder="Digitar aqui"/>
+        </label>
+        <?php if(isset($erros_validacao['tarefa'])):?>
+                    <span class="erro" >
+        <?php echo $erros_validacao['tarefa'];?>
+                    </span>
+        <?php endif;?>
+        <button type="submit">Enviar</button>
+    </form>
+
+<?php
+    if($contador==1)
+    {
+        // Publicando a tarefa
+        $id_user = $_SESSION["id"];
+         echo ("<script>location.href='#';</script>");
+         $sqlGravar="INSERT INTO tasks(task, status, id_user) VALUES ('$paraFazer',1,'$id_user')";     
+
+         if(mysqli_query($conn,$sqlGravar)){
+            echo "<script language='javascript' type='text/javascript'>
+            alert('Registro incluído com sucesso!');
+            window.location.href='task_reports.php';
+            </script>";
+        }else{
+            echo "<script language='javascript' type='text/javascript'>
+            alert('Registro não incluído!');
+            window.location.href='task_reports.php';
+            </script>";
+        }
+        mysqli_close($conn);
+    }
+?>
+
+    <div style = "clear:both; height: 5px;"></div>
+    <h1><a href ="Controller/sair.php" class="button">Sair</a></h1>
+    
+
+
