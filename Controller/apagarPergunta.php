@@ -8,11 +8,23 @@
     $idUser = $_SESSION["id"];
     echo "Nome do usuário: ";
     echo $name.'<br><br>';
+    $id = $_GET['id'];
+?>
+<html>
+    <head>
+       <meta charset="utf-8"/>
+          
+    </head>
+    <body>
+        <h2 align="center"><b>Você tem certeza que deseja apagar essa tarefa?</b></h2>
+        
+    </body>
+</html>
     
-
+<?php
 //consultando o banco de dados
-$tarefas = "SELECT * FROM tasks WHERE id_user=$idUser";
-$tarefas2 = mysqli_query($conn,$tarefas);
+$tarefas = "SELECT * FROM tasks WHERE id=$id";
+$tarefas2 = mysqli_query($conn,$tarefas) or die(mysqli_error($conn));;
 
 //Verificando se há algum resultado
 if(($tarefas2) AND ($tarefas2->num_rows!=0))
@@ -28,12 +40,10 @@ if(($tarefas2) AND ($tarefas2->num_rows!=0))
             $id=$tarefas3['id'];
             echo '<tr align=center>';
             echo '<td>'.$tarefas3['task'].'</td>';
-            echo '<td><a href="apagarPergunta.php?id='.$id.'">Apagar</a></td>';
+            echo '<td><a align="center" href="listarTarefa.php">Não</a></td>';
+            echo '<td><a align="center" href="apagar.php?id='.$id.'">Sim</a></td>';
             echo '</tr>';
         }
     echo "</table>";
     mysqli_close($conn);
 }
-?>
-<br><br>
-<a href ='../task_reports.php' class="button">Voltar</a>

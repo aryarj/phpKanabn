@@ -11,12 +11,11 @@
 
     //consultando o banco de dados
     //Selecionando os usuários
-    $user = "SELECT * FROM users";
+    $user = "SELECT * FROM users WHERE name<>'admin'";
     $user2 = mysqli_query($conn,$user);
-    
 
     //Selecionando as tarefas
-    if($idUser=='admin')
+    if($name=='admin')
     {
         $tarefas = "SELECT * FROM tasks";
     }
@@ -27,10 +26,10 @@
     
     $tarefas2 = mysqli_query($conn,$tarefas);
         
-    /*$tarefas3[] = '';
+    $tarefas3[] = '';
 
     //Verificando se há algum resultado
-    if(($tarefas2) AND ($tarefas2->num_rows!=0))
+   /* if(($tarefas2) AND ($tarefas2->num_rows!=0))
     {
         while($tarefas3 = mysqli_fetch_assoc($tarefas2))
         {
@@ -49,18 +48,20 @@
         {
             $task='';
             $idUser = '';
+            
             if($t['status']==1)
             {
-                $task = $t['task'];;
+                $task = $t['task'];
                 $idUser = $t['id_user'];
                 foreach($user2 as $u)
                 {
-                    $name = '';
+                    $nameUser = '';
                     if($u['id']==$idUser)
+                    //if($u['id'])
                     {
-                        $name = $u['name'];
+                        $nameUser = $u['name'];
                         echo '<div id="'.$t['id_user'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
-                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$name.' </div>';
+                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
                     }
                 }
@@ -83,12 +84,12 @@
                 $idUser = $t['id_user'];
                 foreach($user2 as $u)
                 {
-                    $name = '';
+                    $nameUser = '';
                     if($u['id']==$idUser)
                     {
-                        $name = $u['name'];
+                        $nameUser = $u['name'];
                         echo '<div id="'.$t['id_user'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
-                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$name.' </div>';
+                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
                     }
                 }
@@ -111,12 +112,12 @@
                 $idUser = $t['id_user'];
                 foreach($user2 as $u)
                 {
-                    $name = '';
+                    $nameUser = '';
                     if($u['id']==$idUser)
                     {
-                        $name = $u['name'];
+                        $nameUser = $u['name'];
                         echo '<div id="'.$t['id_user'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
-                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$name.' </div>';
+                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
                     }
                 }
@@ -237,25 +238,26 @@
         $paraFazer ='sem informação';
     }
 ?>
-    <form method='POST'><font size="5">
-        <label>
-        Incluir nova tarefa
-            <input type="text" required name="tarefa" placeholder="Digitar aqui"/>
-        </label>
-        <?php if(isset($erros_validacao['tarefa'])):?>
-                    <span class="erro" >
-        <?php echo $erros_validacao['tarefa'];?>
-                    </span>
-        <?php endif;?>
-        <button type="submit">Enviar</button>
-    </form>
-
+    <?php if($name!='admin'):?>
+        <form method='POST'><font size="5">
+            <label>
+            Incluir nova tarefa
+                <input type="text" required name="tarefa" placeholder="Digitar aqui"/>
+            </label>
+            <?php if(isset($erros_validacao['tarefa'])):?>
+                        <span class="erro" >
+            <?php echo $erros_validacao['tarefa'];?>
+                        </span>
+            <?php endif;?>
+            <button type="submit">Enviar</button>
+        </form>
+    <?php endif; ?>
 <?php
     if($contador==1)
     {
         // Publicando a tarefa
         $id_user = $_SESSION["id"];
-         echo ("<script>location.href='#';</script>");
+         //echo ("<script>location.href='#';</script>");
          $sqlGravar="INSERT INTO tasks(task, status, id_user) VALUES ('$paraFazer',1,'$id_user')";     
 
          if(mysqli_query($conn,$sqlGravar)){
@@ -271,10 +273,18 @@
         }
         mysqli_close($conn);
     }
-?>
+    
 
+    
+?>
+    <br><br>
+    <?php if($name!='admin'):?>
+        <div style = "clear:both; height: 5px;"></div>
+        <a href ="Controller/listarTarefa.php" class="button">Apagar tarefas</a>
+    <?php endif; ?>
+    <br><br>
     <div style = "clear:both; height: 5px;"></div>
-    <h1><a href ="Controller/sair.php" class="button">Sair</a></h1>
+    <a href ="Controller/sair.php" class="button">Sair</a>
     
 
 
