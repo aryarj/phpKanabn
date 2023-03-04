@@ -26,6 +26,7 @@
     <title>Kanban</title>
   </head>
   <body>
+
   <form action="Controller/loginValidation.php" target="_self" method="POST">
         <div class="form-group">
           <label for="exampleInputEmail1">Endereço de email</label>
@@ -39,7 +40,11 @@
 
         <button type="submit" class="btn btn-primary">Enviar</button>
 <br><br>
-      <p>Emais e senhas para acessar o sistema:</p>
+        <p>---------------------------------------------------------------------------------</p>
+        <p align="center">Atenção: Estou encontrando dificuldades em integrar o </p>
+        <p align="center"> PHP com o Javascript e o programa está com alguns 'bugs', mas está evoluindo</p>
+        <p>---------------------------------------------------------------------------------</p>
+        <p>Emails e senhas para acessar o sistema:</p>
         <table>
           <tr>
             <th>Nome</th>

@@ -11,7 +11,7 @@
 
     //consultando o banco de dados
     //Selecionando os usuários
-    $user = "SELECT * FROM users WHERE name<>'admin'";
+    $user = "SELECT * FROM users WHERE name <>'admin'";
     $user2 = mysqli_query($conn,$user);
 
     //Selecionando as tarefas
@@ -27,15 +27,8 @@
     $tarefas2 = mysqli_query($conn,$tarefas);
         
     $tarefas3[] = '';
+    $tarefaStatus[] = '';
 
-    //Verificando se há algum resultado
-   /* if(($tarefas2) AND ($tarefas2->num_rows!=0))
-    {
-        while($tarefas3 = mysqli_fetch_assoc($tarefas2))
-        {
-            echo $tarefas3['task']."<br>";
-        }
-    }*/
 ?>
 
 <br><br>
@@ -57,10 +50,9 @@
                 {
                     $nameUser = '';
                     if($u['id']==$idUser)
-                    //if($u['id'])
                     {
                         $nameUser = $u['name'];
-                        echo '<div id="'.$t['id_user'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
+                        echo '<div id="'.$t['id'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
                         ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
                     }
@@ -88,7 +80,7 @@
                     if($u['id']==$idUser)
                     {
                         $nameUser = $u['name'];
-                        echo '<div id="'.$t['id_user'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
+                        echo '<div id="'.$t['id'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
                         ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
                     }
@@ -116,7 +108,7 @@
                     if($u['id']==$idUser)
                     {
                         $nameUser = $u['name'];
-                        echo '<div id="'.$t['id_user'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
+                        echo '<div id="'.$t['id'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
                         ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
                     }
@@ -126,9 +118,13 @@
     ?>
 </div>
 
+<?php if($name!='admin'):?>
+    <div style="clear:both; height: 20px"></div>
+    <button class="btn" onclick="setReportsToTask();">SALVAR AS ALTERAÇÕES</button>
+<?php endif; ?>
 
-    <!--<div style="clear:both; height: 20px"></div>
-    <button class="btn" onclick="setReportsToTask();">SAVE</button>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>-->
 
 <script type="text/javascript"> 
     function drag(ev) {
@@ -158,33 +154,57 @@
     }
 
 //Atualização Banco de dados, recolhendo as tarefas nas divs
-    /*function setReportsToTask()
+    function setReportsToTask()
     {
-        var lista = []
+        var lista1 = [];
+        var lista2 = [];
+        var lista3 = [];
+        
+        $("#tasks_in").find("div").each(function()
+        {
+            lista1.push(this.id);
+        });
+
         $("#tasks_middle").find("div").each(function()
         {
-            lista.push(this.id);
+            lista2.push(this.id);
         });
-        $.post("prepareTaskToBD.php",{task:"<?php echo $_GET["id"];?>",
-            reports:lista},function(data)
+
+        $("#tasks_out").find("div").each(function()
+        {
+            lista3.push(this.id);
+        });
+
+        $.post("updateBD.php",
             {
-                if(data == 1)
+            idTask1: lista1,
+            idStatus1: 1,
+            idTask2: lista2,
+            idStatus2: 2,
+            idTask3: lista3,
+            idStatus3: 3,
+            },
+            
+            function(data)
                 {
-                    alert('success');
-                }
-                else
-                {
-                    alert('Error:' + data);
-                }
-            });
+                    if(data == 1)
+                    {
+                        alert('success');
+                    }
+                    else
+                    {
+                        alert('Error:' + data);
+                    }
+                });
         
-    }*/
+    }
 
 </script>
 
 
 <div style="clear:both; height: 20px"></div>
 <?php
+
     // Deixando a entrada "tarefa"
     //com uma informação qualquer, para não gerar erro
     $dados= array(
@@ -242,7 +262,7 @@
         <form method='POST'><font size="5">
             <label>
             Incluir nova tarefa
-                <input type="text" required name="tarefa" placeholder="Digitar aqui"/>
+                <input type="text" required name="tarefa" size="50" maxlength="100" placeholder="Digitar aqui"/>
             </label>
             <?php if(isset($erros_validacao['tarefa'])):?>
                         <span class="erro" >
@@ -283,6 +303,7 @@
         <a href ="Controller/listarTarefa.php" class="button">Apagar tarefas</a>
     <?php endif; ?>
     <br><br>
+
     <div style = "clear:both; height: 5px;"></div>
     <a href ="Controller/sair.php" class="button">Sair</a>
     
