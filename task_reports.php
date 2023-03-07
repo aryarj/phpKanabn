@@ -1,11 +1,9 @@
 <?php
     require_once './Controller/connection.php';
-    require_once 'Model/checagem.php';
+    require_once './Model/checagem.php';
     require_once './Model/NovaTarefa.php';
     require_once './Model/listar.php';
     cabecalhoChecagem();
-
-
 
     $name = $_SESSION["name"];
     $idUser = $_SESSION["id"];
@@ -73,7 +71,7 @@
 
 <?php if($name!='admin'):?>
     <div style="clear:both; height: 20px"></div>
-    <button class="btn" onclick="setReportsToTask();">SALVAR AS ALTERAÇÕES</button>
+    <button class="btn" onclick="setReportsToTask();">SALVAR AS ALTERAÇÕES DE MOVIMENTAÇÃO DAS TAREFAS</button>
 <?php endif; ?>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
@@ -137,16 +135,16 @@
             idTask3: lista3,
             idStatus3: 3,
             },
-            
+
             function(data)
                 {
-                    if(data == 1)
+                    if(data != 1)
                     {
-                        //alert('success');
+                        alert('success');
                     }
                     else
                     {
-                        //alert('Error:' + data);
+                        alert('Error:' + data);
                     }
                 });
         

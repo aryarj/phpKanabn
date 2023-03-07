@@ -36,15 +36,6 @@ require_once './Model/NovaTarefa.php';
             $erros_validacao['tarefa']='A tarefa está em branco';
         }
 
-        $transporte[]=$dados;
-    }
-
-    $lista_dados[]=array();
-
-    if(isset($transporte)){
-        $lista_dados=$transporte;
-    }else{
-        $lista_dados=array();
     }
 
     //tarefa e se há essa informação
@@ -60,7 +51,7 @@ require_once './Model/NovaTarefa.php';
         <form method='POST'><font size="5">
             <label>
             Incluir nova tarefa
-                <input type="text" required name="tarefa" size="50" maxlength="100" placeholder="Digitar aqui"/>
+                <input type="text" required name="tarefa" size="50" maxlength="100" placeholder="Digitar aqui, máximo de 100 caracteres"/>
             </label>
             <?php if(isset($erros_validacao['tarefa'])):?>
                         <span class="erro" >
@@ -103,5 +94,5 @@ require_once './Model/NovaTarefa.php';
     <br><br>
 
     <div style = "clear:both; height: 5px;"></div>
-    <a href ="Controller/sair.php" class="button">Sair</a>
+    <a href ="Controller/sair.php" class="button"><font size="5">Sair</a>
     
