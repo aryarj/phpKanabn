@@ -2,7 +2,10 @@
     require_once './Controller/connection.php';
     require_once 'Model/checagem.php';
     require_once './Model/NovaTarefa.php';
+    require_once './Model/listar.php';
     cabecalhoChecagem();
+
+
 
     $name = $_SESSION["name"];
     $idUser = $_SESSION["id"];
@@ -30,91 +33,41 @@
     $tarefaStatus[] = '';
 
 ?>
-
-<br><br>
-
-<div id="tasks_in" style="width: 400px; height: flex; padding: 20px; float:left; overflow-y:auto; 
-    border: 1px solid #ccc; border-radius: 5px" ondrop="drop_in(event)" ondragover="allowDrop(event)">
-<h4>Não iniciado</h4>
+<!DOCTYPE html>
+<html lang="pt=br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/format.css">
+    <title>Kanban</title>
+</head>
+<body>
+<div id="tasks_in" class="decor" ondrop="drop_in(event)" ondragover="allowDrop(event)">
+<h4>Não iniciado</h4> 
     <?php
-        foreach($tarefas2 as $t)
-        {
-            $task='';
-            $idUser = '';
-            
-            if($t['status']==1)
-            {
-                $task = $t['task'];
-                $idUser = $t['id_user'];
-                foreach($user2 as $u)
-                {
-                    $nameUser = '';
-                    if($u['id']==$idUser)
-                    {
-                        $nameUser = $u['name'];
-                        echo '<div id="'.$t['id'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
-                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
-                    }
-                }
-            } 
-        }
+        listar($tarefas2, $user2,1);
+
     ?>
 </div>
 
-<div id="tasks_middle" style="width: 400px; height: flex; padding: 20px; float:left; margin-left: 10px; overflow-y:auto;
-     border: 1px solid #ccc; border-radius: 5px;" ondrop="drop_middle(event)" ondragover="allowDrop(event)">
+<div id="tasks_middle" class="decor separation_left" ondrop="drop_middle(event)" ondragover="allowDrop(event)">
 <h4>Em progresso</h4>
         <?php
-        foreach($tarefas2 as $t)
-        {
-            $task='';
-            $idUser = '';
-            if($t['status']==2)
-            {
-                $task = $t['task'];
-                $idUser = $t['id_user'];
-                foreach($user2 as $u)
-                {
-                    $nameUser = '';
-                    if($u['id']==$idUser)
-                    {
-                        $nameUser = $u['name'];
-                        echo '<div id="'.$t['id'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
-                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
+            
+            listar($tarefas2, $user2,2);
 
-                    }
-                }
-            } 
-        }
         ?>
 </div>
 
-<div id="tasks_out" style="width: 400px; height: flex; padding: 20px; float:left; margin-left: 10px; overflow-y:auto; 
-    border: 1px solid #ccc; border-radius: 5px" ondrop="drop_out(event)" ondragover="allowDrop(event)">
+<div id="tasks_out" class="decor separation_left"
+     ondrop="drop_out(event)" ondragover="allowDrop(event)">
 <h4>Completo</h4>
     <?php
-        foreach($tarefas2 as $t)
-        {
-            $task='';
-            $idUser = '';
-            if($t['status']==3)
-            {
-                $task = $t['task'];
-                $idUser = $t['id_user'];
-                foreach($user2 as $u)
-                {
-                    $nameUser = '';
-                    if($u['id']==$idUser)
-                    {
-                        $nameUser = $u['name'];
-                        echo '<div id="'.$t['id'].'" style="padding: 20px;border:1px solid #ccc; margin:10px 0"
-                        ondragstart="drag(event)" draggable="true">'.$task.' - '.$nameUser.' </div>';
 
-                    }
-                }
-            } 
-        }
+        listar($tarefas2, $user2,3);
+
     ?>
 </div>
 
@@ -189,123 +142,20 @@
                 {
                     if(data == 1)
                     {
-                        alert('success');
+                        //alert('success');
                     }
                     else
                     {
-                        alert('Error:' + data);
+                        //alert('Error:' + data);
                     }
                 });
         
     }
 
 </script>
-
+<br><br>
 
 <div style="clear:both; height: 20px"></div>
-<?php
 
-    // Deixando a entrada "tarefa"
-    //com uma informação qualquer, para não gerar erro
-    $dados= array(
-        'tarefa'=>'',
-        );
-
-        //Caso haja um erro
-        $erros_validacao=array();
-
-    $tarefa = new NovaTarefa;
-
-    // variáveis de confirmação se todos os requisitos foram preenchidos
-        $confTarefa=false;
-    //contador de itens
-        $contador=0;
-
-    if (isset($_POST['tarefa']) && $_POST['tarefa'] !='')
-    {
-        $dados = array();
-
-        $tarefa->setTarefa($_POST['tarefa']);
-        $tarefaGet=$tarefa->getTarefa();
-        if (isset($tarefaGet))
-        {
-            $dados['tarefa']=$tarefaGet;
-            $confTarefa=true;
-            $contador+=1;
-        }
-        else
-        {
-            $erros_validacao['tarefa']='A tarefa está em branco';
-        }
-
-        $transporte[]=$dados;
-    }
-
-    $lista_dados[]=array();
-
-    if(isset($transporte)){
-        $lista_dados=$transporte;
-    }else{
-        $lista_dados=array();
-    }
-
-    //tarefa e se há essa informação
-    if($confTarefa)
-    {
-        $paraFazer=$dados['tarefa'];
-    }else
-    {
-        $paraFazer ='sem informação';
-    }
-?>
-    <?php if($name!='admin'):?>
-        <form method='POST'><font size="5">
-            <label>
-            Incluir nova tarefa
-                <input type="text" required name="tarefa" size="50" maxlength="100" placeholder="Digitar aqui"/>
-            </label>
-            <?php if(isset($erros_validacao['tarefa'])):?>
-                        <span class="erro" >
-            <?php echo $erros_validacao['tarefa'];?>
-                        </span>
-            <?php endif;?>
-            <button type="submit">Enviar</button>
-        </form>
-    <?php endif; ?>
-<?php
-    if($contador==1)
-    {
-        // Publicando a tarefa
-        $id_user = $_SESSION["id"];
-         //echo ("<script>location.href='#';</script>");
-         $sqlGravar="INSERT INTO tasks(task, status, id_user) VALUES ('$paraFazer',1,'$id_user')";     
-
-         if(mysqli_query($conn,$sqlGravar)){
-            echo "<script language='javascript' type='text/javascript'>
-            alert('Registro incluído com sucesso!');
-            window.location.href='task_reports.php';
-            </script>";
-        }else{
-            echo "<script language='javascript' type='text/javascript'>
-            alert('Registro não incluído!');
-            window.location.href='task_reports.php';
-            </script>";
-        }
-        mysqli_close($conn);
-    }
-    
-
-    
-?>
-    <br><br>
-    <?php if($name!='admin'):?>
-        <div style = "clear:both; height: 5px;"></div>
-        <a href ="Controller/listarTarefa.php" class="button">Apagar tarefas</a>
-    <?php endif; ?>
-    <br><br>
-
-    <div style = "clear:both; height: 5px;"></div>
-    <a href ="Controller/sair.php" class="button">Sair</a>
-    
-
-
+</body>
+</html>

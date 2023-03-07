@@ -40,10 +40,7 @@
 
         <button type="submit" class="btn btn-primary">Enviar</button>
 <br><br>
-        <p>---------------------------------------------------------------------------------</p>
-        <p align="center">Atenção: Estou encontrando dificuldades em integrar o </p>
-        <p align="center"> PHP com o Javascript e o programa está com alguns 'bugs', mas está evoluindo</p>
-        <p>---------------------------------------------------------------------------------</p>
+        
         <p>Emails e senhas para acessar o sistema:</p>
         <table>
           <tr>

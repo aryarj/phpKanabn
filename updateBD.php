@@ -1,13 +1,21 @@
 <?php
 require_once './Controller/connection.php';
 
-$task1=0;
+/*$dados=array('idTask1'=>'',
+             'idStatus1'=>'',
+             'idTask2'=>'',
+             'idStatus2'=>'',
+             'idTask3'=>'',
+             'idStatus3'=>'',   
+            );
+*/
+
 $task1 = $_POST["idTask1"];
 $status1 = $_POST["idStatus1"];
-$task2=0;
+
 $task2 = $_POST["idTask2"];
 $status2 = $_POST["idStatus2"];
-$task3=0;
+
 $task3 = $_POST["idTask3"];
 $status3 = $_POST["idStatus3"];
 

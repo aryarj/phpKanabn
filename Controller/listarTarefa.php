@@ -29,6 +29,7 @@ if(($tarefas2) AND ($tarefas2->num_rows!=0))
             echo '<tr align=center>';
             echo '<td>'.$tarefas3['task'].'</td>';
             echo '<td><a href="apagarPergunta.php?id='.$id.'">Apagar</a></td>';
+            echo '<td><a href="#">Editar</a></td>';
             echo '</tr>';
         }
     echo "</table>";
@@ -36,4 +37,4 @@ if(($tarefas2) AND ($tarefas2->num_rows!=0))
 }
 ?>
 <br><br>
-<a href ='../task_reports.php' class="button">Voltar</a>
+<a href ='../task_reports2.php' class="button">Voltar</a>
