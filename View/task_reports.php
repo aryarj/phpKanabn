@@ -37,11 +37,6 @@
         $stage['e3'] = $s ->getStage3();
     }
 
-
-    //$stage['e1']=$_GET["e1"];
-    //$stage['e2']=$_GET["e2"];
-    //$stage['e3']=$_GET["e3"];
-    
     //consultando o banco de dados
     //Selecionando os usuários
     $user = "SELECT * FROM users WHERE name <>'admin'";
@@ -73,53 +68,64 @@
     <title>Kanban</title>
 </head>
 <body>
-<?php //if($dados["e1"]):?>
-<div id="tasks_in" class="decor" ondrop="drop_in(event)" ondragover="allowDrop(event)">
-<h4>Não iniciado</h4> 
-    <?php
-           if($stage["e1"]!=1)
-           {
-                listarEstagio($tarefas2, $user2,1);
-           }
-           else
-           {
-                echo "<h2>Ocultado</h2>";
-           }
-            
 
-    ?>
-</div>
-<?php //endif;?>
-<div id="tasks_middle" class="decor separation_left" ondrop="drop_middle(event)" ondragover="allowDrop(event)">
-<h4>Em progresso</h4>
-        <?php
-            if($stage["e2"]!=1)
-            {
-                listarEstagio($tarefas2, $user2,2);
-            }
-            else
-            {
-                 echo "<h2>Ocultado</h2>";
-            }
+<!--Colocando os quadros dentro de uma tabela, para que eles não fiquem "dançando" na página-->
+<table>
+    <tr>
+        <td>
+            <div id="tasks_in" class="decor" ondrop="drop_in(event)" ondragover="allowDrop(event)">
+            <h4>Não iniciado</h4> 
+                <?php
+                       if($stage["e1"]!=1)
+                       {
+                            listarEstagio($tarefas2, $user2,1);
+                       }
+                       else
+                       {
+                            echo "<h2>Ocultado</h2>";
+                       }
 
-        ?>
-</div>
+                   
+                ?>
+            </div>
+        </td>
+               
+        <td>
+            <div id="tasks_middle" class="decor separation_left" ondrop="drop_middle(event)" ondragover="allowDrop(event)">
+            <h4>Em progresso</h4>
+                    <?php
+                        if($stage["e2"]!=1)
+                        {
+                            listarEstagio($tarefas2, $user2,2);
+                        }
+                        else
+                        {
+                             echo "<h2>Ocultado</h2>";
+                        }
+                    
+                    ?>
+            </div>
+        </td>
+                
+        <td>
+            <div id="tasks_out" class="decor separation_left"
+                 ondrop="drop_out(event)" ondragover="allowDrop(event)">
+            <h4>Completo</h4>
+                <?php
+                        if($stage["e3"]!=1)
+                        {
+                            listarEstagio($tarefas2, $user2,3);
+                        }
+                        else
+                        {
+                             echo "<h2>Ocultado</h2>";
+                        }
 
-<div id="tasks_out" class="decor separation_left"
-     ondrop="drop_out(event)" ondragover="allowDrop(event)">
-<h4>Completo</h4>
-    <?php
-            if($stage["e3"]!=1)
-            {
-                listarEstagio($tarefas2, $user2,3);
-            }
-            else
-            {
-                 echo "<h2>Ocultado</h2>";
-            }
-            
-    ?>
-</div>
+                ?>
+            </div>
+        </td>
+    </tr>
+</table>
 
 <?php if($name!='admin'):?>
     <div style="clear:both; height: 20px"></div>
