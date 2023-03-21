@@ -37,4 +37,4 @@ if(($tarefas2) AND ($tarefas2->num_rows!=0))
 }
 ?>
 <br><br>
-<a href ='../task_reports2.php' class="button">Voltar</a>
+<a href ='../View/task_reports2.php' class="button">Voltar</a>

@@ -1,5 +1,5 @@
 <?php
-    function listar($tarefas2, $user2, $status)
+    function listarEstagio($tarefas2, $user2, $status)
     {
         foreach($tarefas2 as $t)
         {

@@ -1,8 +1,9 @@
 <?php
-    require_once './Controller/connection.php';
-    require_once './Model/checagem.php';
-    require_once './Model/NovaTarefa.php';
-    require_once './Model/listar.php';
+    require_once '../Controller/connection.php';
+    require_once '../Model/checagem.php';
+    require_once '../Model/NovaTarefa.php';
+    require_once '../Model/listar.php';
+    require_once '../Model/VerStage.php';
     cabecalhoChecagem();
 
     $name = $_SESSION["name"];
@@ -10,6 +11,37 @@
     echo "Nome do usuário: ";
     echo $name.'<br><br>';
 
+    // Deixando as entradas "e1, e2 e e3"
+    //com uma informação qualquer, para não gerar erro
+   $stage= array(
+        'e1'=>'',
+        'e2'=>'',
+        'e3'=>'',
+        );
+    
+    $s = new VerStage;
+
+    if(isset($_GET['e1']) && $_GET['e1']!='')
+    {
+        $s -> setStage1($_GET['e1']);
+        $stage['e1'] = $s ->getStage1();
+    }
+    if(isset($_GET['e2']) && $_GET['e2']!='')
+    {
+        $s -> setStage2($_GET['e2']);
+        $stage['e2'] = $s ->getStage2();
+    }
+    if(isset($_GET['e3']) && $_GET['e3']!='')
+    {
+        $s -> setStage3($_GET['e3']);
+        $stage['e3'] = $s ->getStage3();
+    }
+
+
+    //$stage['e1']=$_GET["e1"];
+    //$stage['e2']=$_GET["e2"];
+    //$stage['e3']=$_GET["e3"];
+    
     //consultando o banco de dados
     //Selecionando os usuários
     $user = "SELECT * FROM users WHERE name <>'admin'";
@@ -37,24 +69,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/format.css">
+    <link rel="stylesheet" href="../css/format.css">
     <title>Kanban</title>
 </head>
 <body>
+<?php //if($dados["e1"]):?>
 <div id="tasks_in" class="decor" ondrop="drop_in(event)" ondragover="allowDrop(event)">
 <h4>Não iniciado</h4> 
     <?php
-
-        listar($tarefas2, $user2,1);
+           if($stage["e1"]!=1)
+           {
+                listarEstagio($tarefas2, $user2,1);
+           }
+           else
+           {
+                echo "<h2>Ocultado</h2>";
+           }
+            
 
     ?>
 </div>
-
+<?php //endif;?>
 <div id="tasks_middle" class="decor separation_left" ondrop="drop_middle(event)" ondragover="allowDrop(event)">
 <h4>Em progresso</h4>
         <?php
-            
-            listar($tarefas2, $user2,2);
+            if($stage["e2"]!=1)
+            {
+                listarEstagio($tarefas2, $user2,2);
+            }
+            else
+            {
+                 echo "<h2>Ocultado</h2>";
+            }
 
         ?>
 </div>
@@ -63,9 +109,15 @@
      ondrop="drop_out(event)" ondragover="allowDrop(event)">
 <h4>Completo</h4>
     <?php
-
-        listar($tarefas2, $user2,3);
-
+            if($stage["e3"]!=1)
+            {
+                listarEstagio($tarefas2, $user2,3);
+            }
+            else
+            {
+                 echo "<h2>Ocultado</h2>";
+            }
+            
     ?>
 </div>
 
@@ -126,7 +178,7 @@
             lista3.push(this.id);
         });
 
-        $.post("updateBD.php",
+        $.post("../Model/updateBD.php",
             {
             idTask1: lista1,
             idStatus1: 1,
@@ -140,7 +192,7 @@
                 {
                     if(data != 1)
                     {
-                        alert('success');
+                        alert('successo');
                     }
                     else
                     {

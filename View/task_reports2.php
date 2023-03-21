@@ -1,7 +1,8 @@
 <?php
-require_once './Controller/connection.php';
+require_once '../Controller/connection.php';
 require_once 'task_reports.php';
-require_once './Model/NovaTarefa.php';
+require_once '../Model/NovaTarefa.php';
+require_once '../Model/VerStage.php';
 
     // Deixando a entrada "tarefa"
     //com uma informação qualquer, para não gerar erro
@@ -89,10 +90,24 @@ require_once './Model/NovaTarefa.php';
     <br><br>
     <?php if($name!='admin'):?>
         <div style = "clear:both; height: 5px;"></div>
-        <a href ="Controller/listarTarefa.php" class="button">Apagar ou editar tarefas</a>
+        <a href ="../Controller/listarTarefa.php" class="button">Apagar ou editar tarefas</a>
     <?php endif; ?>
     <br><br>
+   
+    <form action="task_reports2.php">
+    <label><font size="5">Selecione para ocultar uma etapa:</label>
+      <label class="btn btn-secondary active">
+        <input type="checkbox" name="e1" value=1> Não iniciado
+      </label>
+      <label class="btn btn-secondary active">
+        <input type="checkbox" name="e2" value=1> Em progresso
+      </label>
+      <label class="btn btn-secondary active">
+        <input type="checkbox" name="e3" value=1> Completo
+      </label>
+      <input type="submit" value="Ocultar">
+    </form>
 
     <div style = "clear:both; height: 5px;"></div>
-    <a href ="Controller/sair.php" class="button"><font size="5">Sair</a>
+    <a href ="../Controller/sair.php" class="button"><font size="5">Sair</a>
     

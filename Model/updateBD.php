@@ -1,5 +1,5 @@
 <?php
-require_once './Controller/connection.php';
+require_once '../Controller/connection.php';
 
 $dados=array('idTask1'=>'',
              'idStatus1'=>'',
